@@ -1,6 +1,7 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,25 +15,24 @@ import androidx.compose.ui.window.*
 
 fun main() = application {
     val icon = BitmapPainter(useResource("sample.png", ::loadImageBitmap))
-    val mainWindowState = rememberWindowState()
-    val secondWindowState = rememberWindowState()
+    val mainWindowState = rememberWindowState(width = 900.dp, height = 600.dp)
+    val secondWindowState = rememberWindowState(width = 500.dp, height = 300.dp)
     var showMainWindow by remember { mutableStateOf(true) }
     var showSecondWindow by remember { mutableStateOf(false) }
 
     if (showMainWindow) {
-            MainWindow(
-                icon = icon,
-                windowSize = mainWindowState,
-                onClose = {
-                    showMainWindow = false
-                },
-                onButtonClick = {
-                    showSecondWindow = true
-                    showMainWindow = false
-                }
-            )
-        }
-
+        MainWindow(
+            icon = icon,
+            windowSize = mainWindowState,
+            onClose = {
+                showMainWindow = false
+            },
+            onButtonClick = {
+                showSecondWindow = true
+                showMainWindow = false
+            }
+        )
+    }
 
     if (showSecondWindow) {
         SecondaryWindow(
@@ -53,8 +53,8 @@ fun main() = application {
 }
 
 
+
 @Composable
-@Preview
 fun MainWindow(
     icon: BitmapPainter,
     windowSize: WindowState,
@@ -75,7 +75,8 @@ fun MainWindow(
 
             ) {
             Text(
-                "Esta es la ventana principal"
+                "Esta es la ventana principal.",
+                style = MaterialTheme.typography.h5
             )
 
             Spacer(modifier = Modifier.height(100.dp))
@@ -88,14 +89,12 @@ fun MainWindow(
 }
 
 @Composable
-@Preview
 fun SecondaryWindow(
     icon: BitmapPainter,
     windowSize: WindowState,
     onClose: () -> Unit,
     onButtonClick: () -> Unit
 ) {
-
     Window(
         onCloseRequest = onClose,
         title = "Ventana Secundaria",
@@ -109,7 +108,8 @@ fun SecondaryWindow(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                "Esta es la ventana secundaria."
+                "Esta es la ventana secundaria.",
+                style = MaterialTheme.typography.h5
             )
 
             Spacer(modifier = Modifier.height(100.dp))
@@ -119,36 +119,5 @@ fun SecondaryWindow(
                 Text("Abrir ventana principal y cerrar esta")
             }
         }
-
     }
 }
-
-
-    /**
-     * Window(
-     *         onCloseRequest = { showMainWindow = false },
-     *         title = "Ventana Principal",
-     *         icon = icon,
-     *         state = mainWindowState
-     *     ) {
-     *         Column(
-     *             modifier = Modifier
-     *                 .fillMaxSize(),
-     *             verticalArrangement = Arrangement.Center,
-     *             horizontalAlignment = Alignment.CenterHorizontally,
-     *
-     *             ) {
-     *             Text(
-     *                 "Esta es la ventana principal"
-     *             )
-     *
-     *             Spacer(modifier = Modifier.height(100.dp))
-     *
-     *             Button(onClick = {
-     *                 showMainWindow = false
-     *                 showSecondWindow = true
-     *             }) {
-     *                 Text("Abrir Ventana Secundaria y cerrar esta")
-     *             }
-     *         }
-     */
